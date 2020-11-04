@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
@@ -16,14 +16,14 @@
             <div class="card mb-3 col-6" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src="{{ book.img_url}}" class="card-img" alt="{{ book.title }}">
+                        <img src="{{ book.img_src}}" class="card-img" alt="{{ book.title }}">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">{{ book.author }} : {{ book.title }}</h5>
                             <p class="card-text">Жанр: {{book.genres}}</p>
                             <p class="card-text">                        
-                                <small class="text-muted">text</small>
+                                <a href="{{ book.book_path }}" target="_blank" rel="noopener noreferrer" >Читать</a>   
                             </p>
                         </div>
                     </div>
