@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from livereload import Server, shell
+from more_itertools import chunked
 import json
 
 JSON_PATH = "../dvmn_frontend_ch3/books.json"
@@ -17,7 +18,7 @@ def on_reload():
     )
     template = env.get_template("template.html")
     rendered_page = template.render(
-        books=description["books"]
+        books=[*chunked(description["books"], 2)]
     )
 
     with open("index.html", "w", encoding="utf8") as file:
@@ -25,5 +26,5 @@ def on_reload():
 
 on_reload()
 server = Server()
-server.watch('./*', on_reload)
+server.watch('./template.html', on_reload)
 server.serve(root='./')
