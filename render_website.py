@@ -1,7 +1,5 @@
-from os import replace
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-from livereload import Server, shell
+from livereload import Server
 from more_itertools import chunked
 import json
 import os
@@ -34,9 +32,11 @@ def on_reload():
     )
     template = env.get_template("template.html")
     chunks_by_10 = [*chunked(description["books"], 10, strict=False)]
-    print(len(books), len(chunks_by_10))
+    pages_count = len(chunks_by_10)  
+    
     for id, chunk  in enumerate(chunks_by_10):        
-        rendered_page = template.render(books=[*chunked(chunk, 2)])
+        print(pages_count)  
+        rendered_page = template.render(books=[*chunked(chunk, 2)], pages_count=pages_count, current_page=id+1)
         path = os.path.join(HTML_DIR, f"index{id+1}.html")
         with open(path, "w", encoding="utf8") as file:
             file.write(rendered_page)
