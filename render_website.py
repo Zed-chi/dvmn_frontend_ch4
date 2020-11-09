@@ -8,6 +8,7 @@ import os
 from urllib.parse import quote
 
 JSON_PATH = os.path.join("./", "books.json")
+HTML_DIR = os.path.join("./", "pages")
 
 
 def get_books_description(path):
@@ -18,8 +19,9 @@ def get_books_description(path):
 
 def normalize_data_path(books):
     for book in books:
-        book["img_src"] = quote(book["img_src"].replace("\\", "/"))
-        book["book_path"] = quote(book["book_path"].replace("\\", "/"))
+
+        book["img_src"] = quote(book["img_src"].replace("\\", "/").replace(".", "", 1))
+        book["book_path"] = quote(book["book_path"].replace("\\", "/").replace(".", "", 1))
 
 
 def on_reload():
@@ -31,10 +33,13 @@ def on_reload():
         autoescape=select_autoescape(["html", "xml"]),
     )
     template = env.get_template("template.html")
-    rendered_page = template.render(books=[*chunked(description["books"], 2)])
-
-    with open("index.html", "w", encoding="utf8") as file:
-        file.write(rendered_page)
+    chunks_by_10 = [*chunked(description["books"], 10, strict=False)]
+    print(len(books), len(chunks_by_10))
+    for id, chunk  in enumerate(chunks_by_10):        
+        rendered_page = template.render(books=[*chunked(chunk, 2)])
+        path = os.path.join(HTML_DIR, f"index{id+1}.html")
+        with open(path, "w", encoding="utf8") as file:
+            file.write(rendered_page)
 
 
 on_reload()
