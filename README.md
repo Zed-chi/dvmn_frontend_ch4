@@ -1,4 +1,6 @@
 # Онлайн библиотека
+для файлов скачаных [парсером книг](https://github.com/Zed-chi/dvmn_frontend_ch3)
+
 ##### [Пример отображения](https://zed-chi.github.io/dvmn_books/)
 
 
