@@ -17,9 +17,18 @@ def get_books_description(path):
 
 def normalize_data_path(books):
     for book in books:
+        book["img_src"] = quote(book["img_src"].replace("\\", "/").replace(".", "..", 1))
+        book["book_path"] = quote(
+            book["book_path"].replace("\\", "/").replace(".", "..", 1)
+        )
 
+
+def normalize_data_path_for_local(books):
+    for book in books:
         book["img_src"] = quote(book["img_src"].replace("\\", "/").replace(".", "", 1))
-        book["book_path"] = quote(book["book_path"].replace("\\", "/").replace(".", "", 1))
+        book["book_path"] = quote(
+            book["book_path"].replace("\\", "/").replace(".", "", 1)
+        )
 
 
 def on_reload():
@@ -32,11 +41,12 @@ def on_reload():
     )
     template = env.get_template("template.html")
     chunks_by_10 = [*chunked(description["books"], 10, strict=False)]
-    pages_count = len(chunks_by_10)  
-    
-    for id, chunk  in enumerate(chunks_by_10):        
-        print(pages_count)  
-        rendered_page = template.render(books=[*chunked(chunk, 2)], pages_count=pages_count, current_page=id+1)
+    pages_count = len(chunks_by_10)
+
+    for id, chunk in enumerate(chunks_by_10):
+        rendered_page = template.render(
+            books=[*chunked(chunk, 2)], pages_count=pages_count, current_page=id + 1
+        )
         path = os.path.join(HTML_DIR, f"index{id+1}.html")
         with open(path, "w", encoding="utf8") as file:
             file.write(rendered_page)
