@@ -14,6 +14,11 @@ JSON_PATH = os.path.join("./", "books.json")
 HTML_DIR = os.path.join("./", "pages")
 
 
+def clean_html_dir():
+    filepaths_list = os.listdir(HTML_DIR)
+    for filepath in filepaths_list:        
+        os.remove(os.path.join(HTML_DIR, filepath))
+
 def get_books_description_from_json(filepath):
     with open(filepath, "r", encoding="utf-8") as file:
         data = file.read()
@@ -29,6 +34,7 @@ def normalize_data_path(books):
 
 
 def on_reload():
+    clean_html_dir()
     description = get_books_description_from_json(JSON_PATH)
     books_list = description["books"]
     normalize_data_path(books_list)
@@ -51,7 +57,7 @@ def on_reload():
             file.write(rendered_page)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     on_reload()
     server = Server()
     server.watch("./template.html", on_reload)
